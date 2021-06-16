@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\webinar\octopus\remote-octopus\kompose.exe convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: octopus-server
+  name: octopus-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: octopus-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\webinar\octopus\remote-octopus\kompose.exe convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: octopus-server
+    spec:
+      containers:
+      - env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: ADMIN_EMAIL
+          value: 
+        - name: ADMIN_PASSWORD
+          value: yourStrong(!)Password
+        - name: ADMIN_USERNAME
+          value: admin
+        - name: DB_CONNECTION_STRING
+          value: Server=db;Database=OctopusDeployServer;User=octopus;Password=yourStrong(!)Password
+        - name: DISABLE_DIND
+          value: "false"
+        - name: OCTOPUS_SERVER_BASE64_LICENSE
+          value: 
+        image: octopusdeploy/octopusdeploy:latest
+        imagePullPolicy: ""
+        name: octopus-server
+        ports:
+        - containerPort: 8080
+        - containerPort: 10943
+        resources: {}
+        volumeMounts:
+        - mountPath: /repository
+          name: repository
+        - mountPath: /artifacts
+          name: artifacts
+        - mountPath: /tasklogs
+          name: tasklogs
+        - mountPath: /cache
+          name: cache
+        - mountPath: /import
+          name: import
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: repository
+        persistentVolumeClaim:
+          claimName: repository
+      - name: artifacts
+        persistentVolumeClaim:
+          claimName: artifacts
+      - name: tasklogs
+        persistentVolumeClaim:
+          claimName: tasklogs
+      - name: cache
+        persistentVolumeClaim:
+          claimName: cache
+      - name: import
+        persistentVolumeClaim:
+          claimName: import
+status: {}

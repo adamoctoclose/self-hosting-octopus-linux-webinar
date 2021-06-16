@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\webinar\octopus\remote-octopus\kompose.exe convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: octopus-server
+  name: octopus-server
+spec:
+  ports:
+  - name: "8080"
+    port: 8080
+    targetPort: 8080
+  - name: "11111"
+    port: 11111
+    targetPort: 10943
+  selector:
+    io.kompose.service: octopus-server
+status:
+  loadBalancer: {}
